@@ -15,7 +15,8 @@ import MediaPlayer from 'react-native-media-tools';
 const App = () => (
 	<MediaPlayer
 		source={your_amazing_media}
+		width={'100%'}
+    height={200}
 	>
 )
 ```
-  
