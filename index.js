@@ -1,4 +1,4 @@
 
-import Video from 'react-native-video'
+import MediaPlayer from './src/players'
 
-export default Video
+export default MediaPlayer
