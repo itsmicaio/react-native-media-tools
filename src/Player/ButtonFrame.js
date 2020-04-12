@@ -1,12 +1,13 @@
 import React from 'react'
 import {
-		TouchableOpacity,
-		View,
+	TouchableOpacity,
+	View,
 } from 'react-native'
+import {boxStyle} from '../commons'
 
-export default ButtonFrame = ({style, onPress}) => (
+export default ButtonFrame = ({onPress}) => (
     <TouchableOpacity 
-        style={style}
+        style={boxStyle}
         onPress={onPress}
     >
         <View/>

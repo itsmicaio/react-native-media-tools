@@ -1,45 +1,19 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import {
-	View, 
-    StyleSheet,
+    View, 
 } from 'react-native'
-
-import ErrorBox from './Error'
-import PlayButton from './PlayButton'
 import ControlBar from './ControlBar'
 import ButtonFrame from './ButtonFrame'
-import Loading from './Loading'
 
 import Video from 'react-native-video'
-import { colors } from '../../commons';
+import { boxStyle } from 'react-native-media-tools/src/commons'
 
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#000000'
-    },
-    box: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        top: 0,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    liveText: {
-        color: colors.blue,
-        fontWeight: 'bold',
-        fontSize: 13,
-        marginRight: 12
-    },
-});
-
-export default class Stream extends Component {
+export default class Player extends PureComponent {
     state = {
         source: this.props.source,
         loadError: false,
         loading: false,
         currentTime: 0,
-        currentTimeFormatted: '00:00',
         loadingUp: '',
         showControls: true,
         paused: true,
@@ -51,9 +25,11 @@ export default class Stream extends Component {
     }
 
     onLoad = (event) => {
+        console.log(event)
         this.setState({loading: false})
     }
     onError = (event) => {
+        console.log(event)
         this.setState({
             loading: false,
             showControls: false,
@@ -62,35 +38,26 @@ export default class Stream extends Component {
     }
 
     onLoadStart = (event) => {
+        console.log(event)
         this.setState({loading: true})
     }
 
     onReadyForDisplay = (event) => {
+        console.log(event)
         this.setState({loading: false})
     }
 
     onProgress = (event) => {
+        console.log(event)
         const {currentTime} = event
         if (currentTime != this.state.currentTime)
             this.setState({
                 currentTime,
-                currentTimeFormatted: this.formatTime(currentTime),
                 loading: false,
             })
         else {
             this.onProgressLoading()
         }
-    }
-
-    formatTime = (currentTime) => {
-        const formatter = function(num, size) { return ('000' + num).slice(size * -1); },
-        time = parseFloat(currentTime).toFixed(3),
-        hours = Math.floor(time / 60 / 60),
-        minutes = Math.floor(time / 60) % 60,
-        seconds = Math.floor(time - minutes * 60)
-
-        const hoursFormatted = formatter(hours, 2) != '00' ? formatter(hours, 2) + ':' : ''
-        return `${hoursFormatted}${formatter(minutes, 2)}:${formatter(seconds, 2)}`
     }
 
     onProgressLoading = () => {
@@ -136,13 +103,17 @@ export default class Stream extends Component {
             loading,
             loadError,
             muted,
-            currentTimeFormatted
+            currentTime
         } = this.state
 
         const {
             orientation,
             width,
-            height
+            height,
+            ErrorScreenComponent,
+            LoadingComponent,
+            InitialPlayComponent,
+            ControlBarComponent
         } = this.props
 
         const size = {
@@ -152,9 +123,6 @@ export default class Stream extends Component {
 
         const renderVideo = source ? 
             <Video 
-                ref={(ref) => {
-                    this.player = ref
-                }}
                 source={source}
                 onBuffer={this.onBuffer}
                 onLoad={this.onLoad}
@@ -165,49 +133,37 @@ export default class Stream extends Component {
                 muted={muted}
                 paused={paused}
                 style={size}
-                playInBackground={true}
-                minLoadRetryCount={5}
-                resizeMode={'contain'}
-                bufferConfig={{
-                    minBufferMs: 15000,
-                    maxBufferMs: 50000,
-                    bufferForPlaybackMs: 2500,
-                    bufferForPlaybackAfterRebufferMs: 5000
-                }}
             /> 
             : null
 
         const renderError = 
-            <ErrorBox
-                style={styles.box}
+            <ErrorScreenComponent
                 reload={this.reload}
             />
 
         const renderLoading = loading &&
-            <Loading
-                style={styles.box}
-            />
+            <LoadingComponent/>
 
         const renderCenterPlayButton = !loading && paused &&
-            <PlayButton
-                style={styles.box}
+            <InitialPlayComponent
                 togglePause={this.togglePause}
             />
 
         const renderControlBar = showControls &&
             <ControlBar 
+                Component={ControlBarComponent}
                 togglePause={this.togglePause}
                 paused={paused}
                 muted={muted}
                 toggleMute={() => this.setState({muted: !muted})}
                 reload={this.reload}
-                currentTimeFormatted={currentTimeFormatted}
+                currentTime={currentTime}
                 orientation={orientation}
             />
 
         const renderToggleControlsFrame = !loading && !paused && 
             <ButtonFrame 
-                style={styles.box}
+                style={boxStyle}
                 onPress={() => this.setState({showControls: !showControls})}
             />
 
@@ -225,7 +181,7 @@ export default class Stream extends Component {
 
         return (
             <View
-                style={[styles.container, size]}
+                style={[{backgroundColor: '#000'}, size]}
             >
                 {render}
             </View>

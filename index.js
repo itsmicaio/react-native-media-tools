@@ -1,4 +1,4 @@
 
-import MediaPlayer from './src/players'
+import MediaPlayer from './src'
 
 export default MediaPlayer

@@ -3,10 +3,10 @@ import {
     View,
     ActivityIndicator
 } from 'react-native'
-import { colors } from '../../commons'
+import { colors, boxStyle } from '../../commons'
 
-export default Loading = ({style}) => (
-    <View style={style}>
+export default Loading = () => (
+    <View style={boxStyle}>
         <ActivityIndicator color={colors.blue} size={'large'}/>
     </View>
 )

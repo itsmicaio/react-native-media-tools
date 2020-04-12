@@ -5,7 +5,7 @@ import {
     Text,
     StyleSheet,
 } from 'react-native'
-import { colors } from '../../commons';
+import { colors, boxStyle } from '../../commons'
 
 const styles = StyleSheet.create({
     button: {
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ErrorBox = ({style, reload}) => (
-    <View style={style}>
+export default ErrorBox = ({reload}) => (
+    <View style={boxStyle}>
         <Text 
             style={styles.text}
         >
