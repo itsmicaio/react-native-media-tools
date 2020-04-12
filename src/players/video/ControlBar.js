@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation}) => (
+const ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation, currentTimeFormatted}) => (
     <View 
         style={[styles.bar, {paddingHorizontal: Platform.OS === "ios" && orientation === 'landscape' ? 15 : 0}]}
     >
@@ -64,6 +64,7 @@ const ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation
         <View
             style={styles.barSides}
         >
+            <Text>{currentTimeFormatted}</Text>
             <TouchableOpacity
                 onPress={reload}
                 style={styles.barButtons}

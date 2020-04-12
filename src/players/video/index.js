@@ -12,6 +12,7 @@ import Loading from './Loading'
 
 import Video from 'react-native-video'
 import { colors } from '../../commons';
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#000000'
@@ -38,6 +39,7 @@ export default class Stream extends Component {
         loadError: false,
         loading: false,
         currentTime: 0,
+        currentTimeFormatted: '00:00',
         loadingUp: '',
         showControls: true,
         paused: true,
@@ -45,19 +47,13 @@ export default class Stream extends Component {
     }
 
     onBuffer = (event) => {
-        console.log('Buffer')
-        console.log(event)
         this.setState({loading: event.isBuffering})
     }
 
     onLoad = (event) => {
-        console.log('Load')
-        console.log(event)
         this.setState({loading: false})
     }
     onError = (event) => {
-        console.log('Error')
-        console.log(event)
         this.setState({
             loading: false,
             showControls: false,
@@ -66,31 +62,35 @@ export default class Stream extends Component {
     }
 
     onLoadStart = (event) => {
-        console.log('LoadStart')
-        console.log(event)
         this.setState({loading: true})
     }
 
     onReadyForDisplay = (event) => {
-        console.log('ReadyForDisplay')
-        console.log(event)
         this.setState({loading: false})
     }
 
     onProgress = (event) => {
-        console.log('Progress')
-        console.log(event)
-
         const {currentTime} = event
-
         if (currentTime != this.state.currentTime)
             this.setState({
                 currentTime,
+                currentTimeFormatted: this.formatTime(currentTime),
                 loading: false,
             })
         else {
             this.onProgressLoading()
         }
+    }
+
+    formatTime = (currentTime) => {
+        const formatter = function(num, size) { return ('000' + num).slice(size * -1); },
+        time = parseFloat(currentTime).toFixed(3),
+        hours = Math.floor(time / 60 / 60),
+        minutes = Math.floor(time / 60) % 60,
+        seconds = Math.floor(time - minutes * 60)
+
+        const hoursFormatted = formatter(hours, 2) != '00' ? formatter(hours, 2) + ':' : ''
+        return `${hoursFormatted}${formatter(minutes, 2)}:${formatter(seconds, 2)}`
     }
 
     onProgressLoading = () => {
@@ -135,7 +135,8 @@ export default class Stream extends Component {
             showControls, 
             loading,
             loadError,
-            muted
+            muted,
+            currentTimeFormatted
         } = this.state
 
         const {
@@ -200,6 +201,7 @@ export default class Stream extends Component {
                 muted={muted}
                 toggleMute={() => this.setState({muted: !muted})}
                 reload={this.reload}
+                currentTimeFormatted={currentTimeFormatted}
                 orientation={orientation}
             />
 
