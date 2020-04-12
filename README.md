@@ -20,3 +20,7 @@ const App = () => (
 	>
 )
 ```
+
+## Props
+This lib supports almost all [react-native-video](https://github.com/react-native-community/react-native-video) props, because some are used internally by media players.
+Unsupported props: `controls, muted, paused`
