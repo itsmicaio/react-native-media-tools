@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation, currentTimeFormatted}) => (
+export default ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation, currentTimeFormatted}) => (
     <View 
         style={[styles.bar, {paddingHorizontal: Platform.OS === "ios" && orientation === 'landscape' ? 15 : 0}]}
     >
@@ -74,5 +74,3 @@ const ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation
         </View>
     </View>
 )
-
-export default ControlBar

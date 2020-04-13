@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import { boxStyle } from '../../commons'
 
-export default PlayButton = ({togglePause}) => (
+export default InitialPlay = ({togglePause}) => (
     <View style={boxStyle}>
         <TouchableOpacity 
             onPress={togglePause}

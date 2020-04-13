@@ -13,9 +13,10 @@ export default class Player extends PureComponent {
         source: this.props.source,
         loadError: false,
         loading: false,
-        currentTime: 0,
         loadingUp: '',
         showControls: true,
+        currentTime: 0,
+        duration: 0,
         paused: true,
         muted: false,
     }
@@ -26,7 +27,8 @@ export default class Player extends PureComponent {
 
     onLoad = (event) => {
         console.log(event)
-        this.setState({loading: false})
+        const {duration} = event
+        this.setState({loading: false, duration})
     }
     onError = (event) => {
         console.log(event)
@@ -43,7 +45,7 @@ export default class Player extends PureComponent {
     }
 
     onReadyForDisplay = (event) => {
-        console.log(event)
+        console.log(event.duration)
         this.setState({loading: false})
     }
 
@@ -103,7 +105,8 @@ export default class Player extends PureComponent {
             loading,
             loadError,
             muted,
-            currentTime
+            currentTime,
+            duration
         } = this.state
 
         const {
@@ -159,6 +162,7 @@ export default class Player extends PureComponent {
                 reload={this.reload}
                 currentTime={currentTime}
                 orientation={orientation}
+                duration={duration}
             />
 
         const renderToggleControlsFrame = !loading && !paused && 

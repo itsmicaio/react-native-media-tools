@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ErrorBox = ({reload}) => (
+export default ErrorScreen = ({reload}) => (
     <View style={boxStyle}>
         <Text 
             style={styles.text}

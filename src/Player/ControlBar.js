@@ -17,6 +17,7 @@ const ControlBar = ({Component, currentTime, ...props}) => {
     return (
         <Component 
             currentTimeFormatted={currentTimeFormatted}
+            currentTime={currentTime}
             {...props}
         />
     )
