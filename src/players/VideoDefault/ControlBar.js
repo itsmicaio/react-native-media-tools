@@ -35,38 +35,71 @@ const styles = StyleSheet.create({
         fontSize: 13,
         marginHorizontal: 10
     },
+    progress: {
+        flex: 1,
+        flexDirection: 'row',
+        borderRadius: 3,
+        overflow: 'hidden',
+        paddingHorizontal: 10
+    },
+    innerProgressCompleted: {
+        height: 20,
+        backgroundColor: '#cccccc'
+    },
+    innerProgressRemaining: {
+        height: 20,
+        backgroundColor: '#2C2C2C',
+    },
+    timeText:{
+        color: '#FFF'
+    }
 });
 
-export default ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation, currentTimeFormatted}) => (
-    <View 
-        style={[styles.bar, {paddingHorizontal: Platform.OS === "ios" && orientation === 'landscape' ? 15 : 0}]}
-    >
+export default ControlBar = ({
+    paused,
+    togglePause,
+    muted,
+    toggleMute,
+    reload,
+    orientation,
+    currentTimeFormatted,
+    flexCompleted,
+    flexRemaining
+}) => (
         <View
-            style={styles.barSides}
+            style={[styles.bar, { paddingHorizontal: Platform.OS === "ios" && orientation === 'landscape' ? 15 : 0 }]}
         >
-            <TouchableOpacity
-                style={styles.barButtons}
-                onPress={togglePause}
+            <View
+                style={styles.barSides}
             >
+                <TouchableOpacity
+                    style={styles.barButtons}
+                    onPress={togglePause}
+                >
                     {paused ? <Icon name='play' /> : <Icon name='pause' />}
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.barButtons}
-                onPress={toggleMute}
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.barButtons}
+                    onPress={toggleMute}
+                >
+                    {muted ? <Icon name='volume_mute' /> : <Icon name='volume' />}
+                </TouchableOpacity>
+            </View>
+            <View style={styles.progress}>
+                {console.log(flexCompleted)}
+                <View style={[styles.innerProgressCompleted, { flex: flexCompleted }]} />
+                <View style={[styles.innerProgressRemaining, { flex: flexRemaining }]} />
+            </View>
+            <View
+                style={styles.barSides}
             >
-                {muted ? <Icon name='volume_mute' /> : <Icon name='volume' />}
-            </TouchableOpacity>
+                <Text style={styles.timeText}>{currentTimeFormatted}</Text>
+                <TouchableOpacity
+                    onPress={reload}
+                    style={styles.barButtons}
+                >
+                    <Icon name='reload' />
+                </TouchableOpacity>
+            </View>
         </View>
-        <View
-            style={styles.barSides}
-        >
-            <Text>{currentTimeFormatted}</Text>
-            <TouchableOpacity
-                onPress={reload}
-                style={styles.barButtons}
-            >
-                <Icon name='reload' />
-            </TouchableOpacity>
-        </View>
-    </View>
-)
+    )
