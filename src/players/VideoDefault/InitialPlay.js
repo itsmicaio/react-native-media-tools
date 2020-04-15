@@ -2,16 +2,17 @@ import React from 'react'
 import {
     View,
     TouchableOpacity,
-    Text
 } from 'react-native'
 import { boxStyle } from '../../commons'
+
+import Icon from '../../Icon'
 
 export default PlayButton = ({togglePause}) => (
     <View style={boxStyle}>
         <TouchableOpacity 
             onPress={togglePause}
         >
-            <Text>{'play'}</Text>
+            <Icon name='play' width={25} height={25} />
         </TouchableOpacity>
     </View>
 )

@@ -4,9 +4,12 @@ import {
     TouchableOpacity,
     Text,
     StyleSheet,
-    Platform
+    Platform,
 } from 'react-native'
+
 import { colors } from '../../commons'
+
+import Icon from 'react-native-media-tools/src/Icon'
 
 const styles = StyleSheet.create({
     bar: {
@@ -32,9 +35,6 @@ const styles = StyleSheet.create({
         fontSize: 13,
         marginHorizontal: 10
     },
-    icon: {
-        width: 28,
-    }
 });
 
 const ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation, currentTimeFormatted}) => (
@@ -48,17 +48,13 @@ const ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation
                 style={styles.barButtons}
                 onPress={togglePause}
             >
-                <Text style={styles.icon}>
-                    {paused ? 'play' : 'pause'}
-                </Text>
+                    {paused ? <Icon name='play' /> : <Icon name='pause' />}
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.barButtons}
                 onPress={toggleMute}
             >
-                <Text style={styles.icon}>
-                    {muted ? 'volume-mute' : 'volume-up'}
-                </Text>
+                {muted ? <Icon name='volume_mute' /> : <Icon name='volume' />}
             </TouchableOpacity>
         </View>
         <View
@@ -69,7 +65,7 @@ const ControlBar = ({paused, togglePause, muted, toggleMute, reload, orientation
                 onPress={reload}
                 style={styles.barButtons}
             >
-                <Text>{'reload'}</Text>
+                <Icon name='reload' />
             </TouchableOpacity>
         </View>
     </View>
