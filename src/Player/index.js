@@ -1,6 +1,6 @@
-import React, {PureComponent} from 'react'
+import React, { PureComponent } from 'react'
 import {
-    View, 
+    View,
 } from 'react-native'
 import ControlBar from './ControlBar'
 import ButtonFrame from './ButtonFrame'
@@ -19,16 +19,21 @@ export default class Player extends PureComponent {
         duration: 0,
         paused: true,
         muted: false,
+        countdown: false
+    }
+
+    componentDidUpdate = () => {
+        this.state.showControls ? this.hideShowControls() : false
     }
 
     onBuffer = (event) => {
-        this.setState({loading: event.isBuffering})
+        this.setState({ loading: event.isBuffering })
     }
 
     onLoad = (event) => {
         console.log(event)
-        const {duration} = event
-        this.setState({loading: false, duration})
+        const { duration } = event
+        this.setState({ loading: false, duration })
     }
     onError = (event) => {
         console.log(event)
@@ -41,17 +46,17 @@ export default class Player extends PureComponent {
 
     onLoadStart = (event) => {
         console.log(event)
-        this.setState({loading: true})
+        this.setState({ loading: true })
     }
 
     onReadyForDisplay = (event) => {
         console.log(event.duration)
-        this.setState({loading: false})
+        this.setState({ loading: false })
     }
 
     onProgress = (event) => {
         console.log(event)
-        const {currentTime} = event
+        const { currentTime } = event
         if (currentTime != this.state.currentTime)
             this.setState({
                 currentTime,
@@ -63,15 +68,15 @@ export default class Player extends PureComponent {
     }
 
     onProgressLoading = () => {
-        const {loadingUp, loading} = this.state
+        const { loadingUp, loading } = this.state
 
-        if (loading && loadingUp != "" && loadingUp < Date.now()){
+        if (loading && loadingUp != "" && loadingUp < Date.now()) {
             this.setState({
                 loading: false,
                 loadingUp: '',
                 loadError: true,
             })
-        }else if (!loading){
+        } else if (!loading) {
             this.setState({
                 loading: true,
                 loadingUp: Date.now() + 15000
@@ -86,22 +91,42 @@ export default class Player extends PureComponent {
         })
 
         setInterval(
-            () => 
+            () =>
                 this.setState({
                     source: this.props.source
                 }
-        ), 100)
+                ), 100)
     }
 
     togglePause = () => {
-        this.setState({paused: !this.state.paused})
+        this.setState({ paused: !this.state.paused })
+    }
+
+    hideShowControls = () => {
+
+        const countdown = this.state.countdown
+        const showControls = this.state.showControls
+
+        if (!countdown && !this.state.paused) {
+
+            this.setState({ countdown: true })
+
+            setTimeout(() => {
+                showControls && !this.state.paused ?
+                    this.setState({ showControls: false })
+                    :
+                    false
+
+                this.setState({countdown: false})
+            }, 3000)
+        }
     }
 
     render() {
         const {
-            source, 
-            paused, 
-            showControls, 
+            source,
+            paused,
+            showControls,
             loading,
             loadError,
             muted,
@@ -124,8 +149,8 @@ export default class Player extends PureComponent {
             height: orientation === 'portrait' ? (width * 0.5625) : height
         }
 
-        const renderVideo = source ? 
-            <Video 
+        const renderVideo = source ?
+            <Video
                 source={source}
                 onBuffer={this.onBuffer}
                 onLoad={this.onLoad}
@@ -136,16 +161,16 @@ export default class Player extends PureComponent {
                 muted={muted}
                 paused={paused}
                 style={size}
-            /> 
+            />
             : null
 
-        const renderError = 
+        const renderError =
             <ErrorScreenComponent
                 reload={this.reload}
             />
 
         const renderLoading = loading &&
-            <LoadingComponent/>
+            <LoadingComponent />
 
         const renderCenterPlayButton = !loading && paused &&
             <InitialPlayComponent
@@ -153,27 +178,27 @@ export default class Player extends PureComponent {
             />
 
         const renderControlBar = showControls &&
-            <ControlBar 
+            <ControlBar
                 Component={ControlBarComponent}
                 togglePause={this.togglePause}
                 paused={paused}
                 muted={muted}
-                toggleMute={() => this.setState({muted: !muted})}
+                toggleMute={() => this.setState({ muted: !muted })}
                 reload={this.reload}
                 currentTime={currentTime}
                 orientation={orientation}
                 duration={duration}
             />
 
-        const renderToggleControlsFrame = !loading && !paused && 
-            <ButtonFrame 
+        const renderToggleControlsFrame = !loading && !paused &&
+            <ButtonFrame
                 style={boxStyle}
-                onPress={() => this.setState({showControls: !showControls})}
+                onPress={() => this.setState({ showControls: !showControls })}
             />
 
 
         const render = loadError ?
-                renderError
+            renderError
             :
             <>
                 {renderVideo}
@@ -185,7 +210,7 @@ export default class Player extends PureComponent {
 
         return (
             <View
-                style={[{backgroundColor: '#000'}, size]}
+                style={[{ backgroundColor: '#000' }, size]}
             >
                 {render}
             </View>
