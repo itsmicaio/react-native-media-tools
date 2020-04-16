@@ -63,9 +63,22 @@ export default ControlBar = ({
     reload,
     orientation,
     currentTimeFormatted,
-    flexCompleted,
-    flexRemaining
-}) => (
+    currentTime,
+    duration
+}) => {
+
+    function getCurrentTimePercentage(currentTime, duration) {
+        if (currentTime > 0) {
+            return parseFloat(currentTime) / parseFloat(duration)
+        } else {
+            return 0
+        }
+    }
+
+    const flexCompleted = getCurrentTimePercentage(currentTime, duration) * 100;
+    const flexRemaining = (1 - getCurrentTimePercentage(currentTime, duration)) * 100;
+
+    return(
         <View
             style={[styles.bar, { paddingHorizontal: Platform.OS === "ios" && orientation === 'landscape' ? 15 : 0 }]}
         >
@@ -103,3 +116,4 @@ export default ControlBar = ({
             </View>
         </View>
     )
+}

@@ -11,25 +11,13 @@ function formatTime(currentTime) {
     return `${hoursFormatted}${formatter(minutes, 2)}:${formatter(seconds, 2)}`
 }
 
-function getCurrentTimePercentage(currentTime, duration) {
-    if (currentTime > 0) {
-        return parseFloat(currentTime) / parseFloat(duration)
-    } else {
-        return 0
-    }
-}
-
-const ControlBar = ({ Component, currentTime, duration, ...props }) => {
+const ControlBar = ({ Component, currentTime, ...props }) => {
     const currentTimeFormatted = formatTime(currentTime)
-    const flexCompleted = getCurrentTimePercentage(currentTime, duration) * 100;
-    const flexRemaining = (1 - getCurrentTimePercentage(currentTime, duration)) * 100;
 
     return (
         <Component
             currentTimeFormatted={currentTimeFormatted}
             currentTime={currentTime}
-            flexCompleted={flexCompleted}
-            flexRemaining={flexRemaining}
             {...props}
         />
     )
