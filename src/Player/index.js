@@ -12,7 +12,7 @@ export default class Player extends PureComponent {
     state = {
         source: this.props.source,
         loadError: false,
-        loading: false,
+        loading: true,
         loadingUp: '',
         showControls: true,
         currentTime: 0,
@@ -28,11 +28,15 @@ export default class Player extends PureComponent {
 
     onBuffer = (event) => {
         this.setState({ loading: event.isBuffering })
+
+        if (this.props.onBuffer) this.props.onBuffer(event)
     }
 
     onLoad = (event) => {
         const { duration } = event
         this.setState({ loading: false, duration })
+
+        if (this.props.onLoad) this.props.onLoad(event)
     }
     onError = (event) => {
         this.setState({
@@ -40,14 +44,20 @@ export default class Player extends PureComponent {
             showControls: false,
             loadError: true,
         })
+
+        if (this.props.onError) this.props.onError(event)
     }
 
     onLoadStart = (event) => {
         this.setState({ loading: true })
+
+        if (this.props.onLoadStart) this.props.onLoadStart(event)
     }
 
     onReadyForDisplay = (event) => {
         this.setState({ loading: false })
+
+        if (this.props.onReadyForDisplay) this.props.onReadyForDisplay(event)
     }
 
     onProgress = (event) => {
@@ -60,6 +70,8 @@ export default class Player extends PureComponent {
         else {
             this.onProgressLoading()
         }
+
+        if (this.props.onProgress) this.props.onProgress(event)
     }
 
     onProgressLoading = () => {
@@ -77,6 +89,8 @@ export default class Player extends PureComponent {
                 loadingUp: Date.now() + 15000
             })
         }
+
+        if (this.props.onProgressLoading) this.props.onProgressLoading(event)
     }
 
     reload = () => {
@@ -137,7 +151,14 @@ export default class Player extends PureComponent {
             ErrorScreenComponent,
             LoadingComponent,
             InitialPlayComponent,
-            ControlBarComponent
+            ControlBarComponent,
+            onBuffer,
+            onLoad,
+            onError,
+            onLoadStart,
+            onReadyForDisplay,
+            onProgress,
+            ...props
         } = this.props
 
         const size = {
@@ -157,6 +178,7 @@ export default class Player extends PureComponent {
                 muted={muted}
                 paused={paused}
                 style={size}
+                {...props}
             />
             : null
 
@@ -199,8 +221,8 @@ export default class Player extends PureComponent {
             <>
                 {renderVideo}
                 {renderCenterPlayButton}
-                {renderLoading}
                 {renderToggleControlsFrame}
+                {renderLoading}
                 {renderControlBar}
             </>
 

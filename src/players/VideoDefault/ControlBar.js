@@ -99,7 +99,6 @@ export default ControlBar = ({
                 </TouchableOpacity>
             </View>
             <View style={styles.progress}>
-                {console.log(flexCompleted)}
                 <View style={[styles.innerProgressCompleted, { flex: flexCompleted }]} />
                 <View style={[styles.innerProgressRemaining, { flex: flexRemaining }]} />
             </View>
