@@ -25,9 +25,16 @@ const App = () => (
 This lib supports almost all [react-native-video](https://github.com/react-native-community/react-native-video) props, because some are used internally by media players.\
 Unsupported props: `controls, muted, paused`
 
+### type
+Defines what type of media player will be rendered. `Default: video`
+
+Type | Description
+--- | ---
+video | Type default. It makes your life easier when creating a video player.
+audio | Makes your life easier when creating an audio player
+
+
 ## Component Props
-
-
 ### errorScreenComponent
 Allows you to replace the error screen. List of props received on component:
 Property | Type | Description
