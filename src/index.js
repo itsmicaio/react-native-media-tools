@@ -1,6 +1,12 @@
 import React from 'react'
 import Player from './Player'
 import PlayerVideoDefault from './players/VideoDefault'
+import PlayerAudioDefault from './players/AudioDefault'
+
+players = {
+    video: PlayerVideoDefault,
+    audio: PlayerAudioDefault,
+}
 
 const MediaPlayer = ({
     controls, 
@@ -10,6 +16,7 @@ const MediaPlayer = ({
     loadingComponent,
     initialPlayComponent,
     controlBarComponent,
+    type = "video",
     ...props
 }) => {
 
@@ -20,9 +27,11 @@ const MediaPlayer = ({
         unsupportedProps
     )
     
-    function getComponent(type, propComponent){
+    const player = players[type]
+
+    function getComponent(componentType, propComponent){
         if (propComponent) return propComponent
-        return PlayerVideoDefault[type]
+        return player[componentType]
     }
 
     const components = {
