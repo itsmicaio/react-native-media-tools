@@ -9,9 +9,9 @@ players = {
 }
 
 const MediaPlayer = ({
-    controls, 
-    paused, 
-    muted, 
+    controls,
+    paused,
+    muted,
     errorScreenComponent,
     loadingComponent,
     initialPlayComponent,
@@ -20,16 +20,16 @@ const MediaPlayer = ({
     ...props
 }) => {
 
-	const unsupportedProps = ['controls', 'paused', 'muted']
-	controls && console.warn(
-        'react-native-media-tools: Your passed one or more ' + 
-        'props that are not supported.\n\nUnsupported props:\n', 
+    const unsupportedProps = ['controls', 'paused', 'muted']
+    controls && console.warn(
+        'react-native-media-tools: Your passed one or more ' +
+        'props that are not supported.\n\nUnsupported props:\n',
         unsupportedProps
     )
-    
+
     const player = players[type]
 
-    function getComponent(componentType, propComponent){
+    function getComponent(componentType, propComponent) {
         if (propComponent) return propComponent
         return player[componentType]
     }
@@ -41,12 +41,15 @@ const MediaPlayer = ({
         ControlBarComponent: getComponent('controlBarComponent', controlBarComponent)
     }
 
-	return (
-        <Player 
+    const notHideControls = type === 'audio'
+
+    return (
+        <Player
+            notHideControls={notHideControls}
             {...components}
-			{...props}
-		/>
-	)
+            {...props}
+        />
+    )
 }
 
 export default MediaPlayer

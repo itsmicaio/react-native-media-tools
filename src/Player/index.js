@@ -31,12 +31,10 @@ export default class Player extends PureComponent {
     }
 
     onLoad = (event) => {
-        console.log(event)
         const { duration } = event
         this.setState({ loading: false, duration })
     }
     onError = (event) => {
-        console.log(event)
         this.setState({
             loading: false,
             showControls: false,
@@ -45,17 +43,14 @@ export default class Player extends PureComponent {
     }
 
     onLoadStart = (event) => {
-        console.log(event)
         this.setState({ loading: true })
     }
 
     onReadyForDisplay = (event) => {
-        console.log(event.duration)
         this.setState({ loading: false })
     }
 
     onProgress = (event) => {
-        console.log(event)
         const { currentTime } = event
         if (currentTime != this.state.currentTime)
             this.setState({
@@ -103,6 +98,7 @@ export default class Player extends PureComponent {
     }
 
     hideShowControls = () => {
+        if (this.props.notHideControls) return
 
         const countdown = this.state.countdown
         const showControls = this.state.showControls
