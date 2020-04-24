@@ -8,7 +8,9 @@ import ButtonFrame from './ButtonFrame'
 import Video from 'react-native-video'
 import { boxStyle } from 'react-native-media-tools/src/commons'
 
+
 export default class Player extends PureComponent {
+
     state = {
         source: this.props.source,
         loadError: false,
@@ -19,11 +21,12 @@ export default class Player extends PureComponent {
         duration: 0,
         paused: this.props.isPaused,
         muted: false,
-        countdown: false
+        countdown: false,
+        isMounted: true
     }
 
-    componentDidUpdate = () => {
-        this.state.showControls ? this.hideShowControls() : false
+    componentWillUnmount = () => {
+        this.setState({ isMounted: false })
     }
 
     onBuffer = (event) => {
@@ -39,6 +42,7 @@ export default class Player extends PureComponent {
         if (this.props.onLoad) this.props.onLoad(event)
         this.refs.VIDEO_COMPONENT.seek(this.props.currentTime)
     }
+
     onError = (event) => {
         this.setState({
             loading: false,
@@ -63,6 +67,8 @@ export default class Player extends PureComponent {
 
     onProgress = (event) => {
         const { currentTime } = event
+
+        if (!this.state.isMounted) return
 
         if (currentTime != this.state.currentTime) {
             this.setState({
@@ -92,25 +98,33 @@ export default class Player extends PureComponent {
                 loadingUp: Date.now() + 15000
             })
         }
-
         if (this.props.onProgressLoading) this.props.onProgressLoading(event)
     }
 
-    reload = () => {
+    promisedSetState = (newState) => {
+        return new Promise((resolve) => {
+            this.setState(newState, () => {
+                resolve()
+            });
+        });
+    }
+
+    reload = async () => {
         const { setCurrentTime, setIsPaused } = this.props
 
-        this.setState({
+        await this.promisedSetState({
             source: '',
             loadError: false,
+            isMounted: false
         })
-        setInterval(
-            () => {
-                this.setState({
-                    source: this.props.source,
-                })
 
-            }, 100)
+        await this.promisedSetState({
+            source: this.props.source,
+            isMounted: true
+        })
+
         setCurrentTime(0)
+        this.setState({ isMounted: true })
         this.refs.VIDEO_COMPONENT.seek(this.props.currentTime)
         setIsPaused(false)
     }
@@ -126,6 +140,7 @@ export default class Player extends PureComponent {
         const { currentTime } = this.state
 
         setCurrentTime(currentTime)
+        this.setState({ isMounted: false })
         toggleFullScreen(!fullscreen)
     }
 
