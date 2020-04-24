@@ -64,7 +64,9 @@ export default ControlBar = ({
     orientation,
     currentTimeFormatted,
     currentTime,
-    duration
+    duration,
+    toggleFullScreen,
+    fullscreen
 }) => {
 
     function getCurrentTimePercentage(currentTime, duration) {
@@ -111,6 +113,12 @@ export default ControlBar = ({
                     style={styles.barButtons}
                 >
                     <Icon name='reload' />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={toggleFullScreen}
+                    style={styles.barButtons}
+                >
+                    {fullscreen ? <Icon name='exit_fullscreen' /> : <Icon name='enter_fullscreen' />}
                 </TouchableOpacity>
             </View>
         </View>

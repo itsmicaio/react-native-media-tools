@@ -17,7 +17,7 @@ export default class Player extends PureComponent {
         showControls: true,
         currentTime: 0,
         duration: 0,
-        paused: true,
+        paused: this.props.isPaused,
         muted: false,
         countdown: false
     }
@@ -37,6 +37,7 @@ export default class Player extends PureComponent {
         this.setState({ loading: false, duration })
 
         if (this.props.onLoad) this.props.onLoad(event)
+        this.refs.VIDEO_COMPONENT.seek(this.props.currentTime)
     }
     onError = (event) => {
         this.setState({
@@ -62,11 +63,13 @@ export default class Player extends PureComponent {
 
     onProgress = (event) => {
         const { currentTime } = event
-        if (currentTime != this.state.currentTime)
+
+        if (currentTime != this.state.currentTime) {
             this.setState({
                 currentTime,
                 loading: false,
             })
+        }
         else {
             this.onProgressLoading()
         }
@@ -94,21 +97,36 @@ export default class Player extends PureComponent {
     }
 
     reload = () => {
+        const { setCurrentTime, setIsPaused } = this.props
+
         this.setState({
             source: '',
             loadError: false,
         })
-
         setInterval(
-            () =>
+            () => {
                 this.setState({
-                    source: this.props.source
-                }
-                ), 100)
+                    source: this.props.source,
+                })
+
+            }, 100)
+        setCurrentTime(0)
+        this.refs.VIDEO_COMPONENT.seek(this.props.currentTime)
+        setIsPaused(false)
     }
 
     togglePause = () => {
+        const { isPaused, setIsPaused } = this.props
         this.setState({ paused: !this.state.paused })
+        setIsPaused(!isPaused)
+    }
+
+    toggleFullScreen = () => {
+        const { setCurrentTime, toggleFullScreen, fullscreen } = this.props
+        const { currentTime } = this.state
+
+        setCurrentTime(currentTime)
+        toggleFullScreen(!fullscreen)
     }
 
     hideShowControls = () => {
@@ -127,7 +145,7 @@ export default class Player extends PureComponent {
                     :
                     false
 
-                this.setState({countdown: false})
+                this.setState({ countdown: false })
             }, 3000)
         }
     }
@@ -158,6 +176,8 @@ export default class Player extends PureComponent {
             onLoadStart,
             onReadyForDisplay,
             onProgress,
+            toggleFullScreen,
+            fullscreen,
             ...props
         } = this.props
 
@@ -168,6 +188,7 @@ export default class Player extends PureComponent {
 
         const renderVideo = source ?
             <Video
+                ref='VIDEO_COMPONENT'
                 source={source}
                 onBuffer={this.onBuffer}
                 onLoad={this.onLoad}
@@ -206,6 +227,8 @@ export default class Player extends PureComponent {
                 currentTime={currentTime}
                 orientation={orientation}
                 duration={duration}
+                toggleFullScreen={this.toggleFullScreen}
+                fullscreen={fullscreen}
             />
 
         const renderToggleControlsFrame = !loading && !paused &&
