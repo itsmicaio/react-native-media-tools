@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        paddingRight: 12,
     },
     barButtons: {
         marginLeft: 12

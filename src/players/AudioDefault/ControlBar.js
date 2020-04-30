@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        paddingRight: 12,
     },
     barButtons: {
         marginLeft: 12
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: '#2C2C2C',
     },
-    timeText:{
+    timeText: {
         color: '#FFF'
     }
 });
@@ -78,7 +79,7 @@ export default ControlBar = ({
     const flexCompleted = getCurrentTimePercentage(currentTime, duration) * 100;
     const flexRemaining = (1 - getCurrentTimePercentage(currentTime, duration)) * 100;
 
-    return(
+    return (
         <View
             style={[styles.bar, { paddingHorizontal: Platform.OS === "ios" && orientation === 'landscape' ? 15 : 0 }]}
         >

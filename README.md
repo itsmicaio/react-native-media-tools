@@ -103,6 +103,8 @@ muted | bool | True: muted
 currentTimeFormatted | text | Time formatted in HH:mm:ss
 currentTime | float | Current media time in seconds
 duration | float | Media duration time in seconds
+toggleFullscreen | function | Function to toggle fullscreen mode
+fulscreen | bool | True: player in fullscreen / false: normal mode
 
 
 ```javascript
@@ -125,5 +127,10 @@ export default ControlBar = ({
 		<Text>
 			{currentTimeFormatted}
 		</Text>
+		<TouchableOpacity
+			onPress={toggleFullScreen}
+		>
+				{fullscreen ? 'exit_fullscreen' : 'enter_fullscreen'}
+		</TouchableOpacity>
 	</View>
 )
