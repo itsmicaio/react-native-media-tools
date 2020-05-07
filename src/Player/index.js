@@ -132,7 +132,6 @@ export default class Player extends PureComponent {
         const { isPaused, setIsPaused } = this.props
         this.setState({ paused: !this.state.paused })
         setIsPaused(!isPaused)
-        console.log(this.props.orientation)
     }
 
     toggleFullScreen = () => {

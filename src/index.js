@@ -49,7 +49,6 @@ const MediaPlayer = ({
         Dimensions.addEventListener('change', () => {
             const orientation = getOrientation()
             setOrientation(orientation)
-            console.log(orientation)
         })
     }, [])
 
