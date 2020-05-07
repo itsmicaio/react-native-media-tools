@@ -25,9 +25,8 @@ export default class Player extends PureComponent {
         isMounted: true
     }
 
-    componentWillUnmount = () => {
-        this.setState({ isMounted: false })
-    }
+    componentWillUnmount = () => this.setState({ isMounted: false })
+    
 
     onBuffer = (event) => {
         this.setState({ loading: event.isBuffering })
@@ -133,6 +132,7 @@ export default class Player extends PureComponent {
         const { isPaused, setIsPaused } = this.props
         this.setState({ paused: !this.state.paused })
         setIsPaused(!isPaused)
+        console.log(this.props.orientation)
     }
 
     toggleFullScreen = () => {
@@ -198,7 +198,7 @@ export default class Player extends PureComponent {
 
         const size = {
             width: width,
-            height: orientation === 'portrait' ? (width * 0.5625) : height
+            height: orientation === 'portrait' ? height : '96%',
         }
 
         const renderVideo = source ?
