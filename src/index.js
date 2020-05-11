@@ -80,8 +80,10 @@ const MediaPlayer = ({
 
     const notHideControls = type === 'audio'
 
-    const toggleFullScreen = () => setFullscreen(!fullscreen)
-    
+    const toggleFullScreen = (time) => {
+        setFullscreen(!fullscreen)
+        setCurrentTime(time)
+    }
 
     const renderPlayer = !fullscreen && <Player
         notHideControls={notHideControls}
@@ -100,6 +102,7 @@ const MediaPlayer = ({
     const renderPlayerFullscreen = fullscreen && <Modal
         visible={fullscreen}
         transparent={false}
+        onRequestClose={() => toggleFullScreen(currentTime)}
     >
         <View style={styles.modal} >
             <StatusBar hidden={fullscreen} />
