@@ -33,6 +33,15 @@ Type | Description
 video | Type default. It makes your life easier when creating a video player.
 audio | Makes your life easier when creating an audio player
 
+### onToggleFullscreen
+Callback of toggle fullscreen modes. Receives a boolean value.
+Useful for changing the screen orientation when the user enters full screen mode.
+
+```javascript
+<MediaTools
+  onToggleFullscreen={(fullscreen) => console.log(fullscreen)}
+/>
+```
 
 ## Component Props
 ### errorScreenComponent

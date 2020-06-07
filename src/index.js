@@ -37,6 +37,7 @@ const MediaPlayer = ({
     initialPlayComponent,
     controlBarComponent,
     progressBarComponent,
+    onToggleFullscreen,
     type = "video",
     ...props
 }) => {
@@ -83,8 +84,11 @@ const MediaPlayer = ({
     const notHideControls = type === 'audio'
 
     const toggleFullScreen = (time) => {
-        setFullscreen(!fullscreen)
+        const fullscrenMode = !fullscreen
+        setFullscreen(fullscrenMode)
         setCurrentTime(time)
+
+        if (onToggleFullscreen) onToggleFullscreen(fullscrenMode)
     }
 
     const renderPlayer = !fullscreen && <Player

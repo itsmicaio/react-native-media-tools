@@ -27,7 +27,7 @@ export default class Player extends PureComponent {
 
     componentWillUnmount = () => {
         this.setState({ isMounted: false })
-        this.toggleFullScreen(this.state.currentTime)
+        this.setCurrentTime(this.state.currentTime)
     }
     
 
