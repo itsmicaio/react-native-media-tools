@@ -36,6 +36,7 @@ const MediaPlayer = ({
     loadingComponent,
     initialPlayComponent,
     controlBarComponent,
+    progressBarComponent,
     type = "video",
     ...props
 }) => {
@@ -75,7 +76,8 @@ const MediaPlayer = ({
         ErrorScreenComponent: getComponent('errorScreenComponent', errorScreenComponent),
         LoadingComponent: getComponent('loadingComponent', loadingComponent),
         InitialPlayComponent: getComponent('initialPlayComponent', initialPlayComponent),
-        ControlBarComponent: getComponent('controlBarComponent', controlBarComponent)
+        ControlBarComponent: getComponent('controlBarComponent', controlBarComponent),
+        ProgressBarComponent: getComponent('progressBarComponent', progressBarComponent)
     }
 
     const notHideControls = type === 'audio'
