@@ -145,6 +145,15 @@ export default class Player extends PureComponent {
         toggleFullScreen(currentTime)
     }
 
+    setCurrentTime = (time) => {
+        this.setState({ isMounted: false })
+
+        this.refs.VIDEO_COMPONENT.seek(time)
+        this.props.setCurrentTime(time)
+
+        this.setState({ isMounted: true })
+    }
+
     hideShowControls = () => {
         if (this.props.notHideControls) return
 
