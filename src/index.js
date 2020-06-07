@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     StyleSheet,
     Modal,
     View,
     StatusBar,
+    Dimensions,
 } from 'react-native'
 import Player from './Player'
 import PlayerVideoDefault from './players/VideoDefault'
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     modal: {
         backgroundColor: "black",
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
 })
 
@@ -42,6 +43,19 @@ const MediaPlayer = ({
     const [fullscreen, setFullscreen] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [isPaused, setIsPaused] = useState(true)
+    const [orientation, setOrientation] = useState('portrait')
+
+    useEffect(() => {
+        Dimensions.addEventListener('change', () => {
+            const orientation = getOrientation()
+            setOrientation(orientation)
+        })
+    }, [])
+
+    const getOrientation = () => {
+        const dim = Dimensions.get('screen')
+        return dim.height >= dim.width ? 'portrait' : 'landscape'
+    }
 
     const unsupportedProps = ['controls', 'paused', 'muted']
     controls && console.warn(
@@ -66,7 +80,10 @@ const MediaPlayer = ({
 
     const notHideControls = type === 'audio'
 
-    const toggleFullScreen = () => setFullscreen(!fullscreen)
+    const toggleFullScreen = (time) => {
+        setFullscreen(!fullscreen)
+        setCurrentTime(time)
+    }
 
     const renderPlayer = !fullscreen && <Player
         notHideControls={notHideControls}
@@ -76,6 +93,7 @@ const MediaPlayer = ({
         setCurrentTime={setCurrentTime}
         isPaused={isPaused}
         setIsPaused={setIsPaused}
+        orientation={orientation}
         {...components}
         {...props}
     />
@@ -84,6 +102,7 @@ const MediaPlayer = ({
     const renderPlayerFullscreen = fullscreen && <Modal
         visible={fullscreen}
         transparent={false}
+        onRequestClose={() => toggleFullScreen(currentTime)}
     >
         <View style={styles.modal} >
             <StatusBar hidden={fullscreen} />
@@ -91,11 +110,12 @@ const MediaPlayer = ({
                 notHideControls={notHideControls}
                 toggleFullScreen={toggleFullScreen}
                 fullscreen={fullscreen}
-                style={styles.fullscreen}
                 currentTime={currentTime}
+                style={styles.fullscreen}
                 setCurrentTime={setCurrentTime}
                 isPaused={isPaused}
                 setIsPaused={setIsPaused}
+                orientation={orientation}
                 {...components}
                 {...props}
             />

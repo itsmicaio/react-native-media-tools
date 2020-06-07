@@ -27,7 +27,9 @@ export default class Player extends PureComponent {
 
     componentWillUnmount = () => {
         this.setState({ isMounted: false })
+        this.toggleFullScreen(this.state.currentTime)
     }
+    
 
     onBuffer = (event) => {
         this.setState({ loading: event.isBuffering })
@@ -136,12 +138,11 @@ export default class Player extends PureComponent {
     }
 
     toggleFullScreen = () => {
-        const { setCurrentTime, toggleFullScreen, fullscreen } = this.props
+        const { toggleFullScreen } = this.props
         const { currentTime } = this.state
 
-        setCurrentTime(currentTime)
         this.setState({ isMounted: false })
-        toggleFullScreen(!fullscreen)
+        toggleFullScreen(currentTime)
     }
 
     hideShowControls = () => {
@@ -198,7 +199,7 @@ export default class Player extends PureComponent {
 
         const size = {
             width: width,
-            height: orientation === 'portrait' ? (width * 0.5625) : height
+            height: orientation === 'portrait' ? height : '96%',
         }
 
         const renderVideo = source ?
