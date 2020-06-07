@@ -13,11 +13,11 @@ Install [react-native-video](https://github.com/react-native-community/react-nat
 import MediaPlayer from 'react-native-media-tools';
 
 const App = () => (
-	<MediaPlayer
-		source={your_amazing_media}
-		width={320}
-		height={200}
-	/>
+  <MediaPlayer
+    source={your_amazing_media}
+    width={320}
+    height={200}
+  />
 )
 ```
 
@@ -44,18 +44,18 @@ reload | function | Function to reload media.
 Example of a valid component:
 ```javascript
 export default ErrorScreen = ({reload}) => (
-	<View>
-		<Text>
-			ERROR TRYING TO PLAY THE MEDIA
-		</Text>
-		<TouchableOpacity 
-			onPress={reload}
-		>
-			<Text>
-				Reload
-			</Text>
-		</TouchableOpacity>
-	</View>
+  <View>
+    <Text>
+      ERROR TRYING TO PLAY THE MEDIA
+    </Text>
+    <TouchableOpacity 
+      onPress={reload}
+    >
+      <Text>
+        Reload
+      </Text>
+    </TouchableOpacity>
+  </View>
 )
 ```
 
@@ -67,15 +67,15 @@ togglePause | function | Function to toggle vídeo play or pause;
 
 ```javascript
 export default InitialPlay = ({togglePause}) => (
-	<View>
-		<TouchableOpacity 
-			onPress={togglePause}
-		>
-			<Text>
-				Play
-			</Text>
-		</TouchableOpacity>
-	</View>
+  <View>
+    <TouchableOpacity 
+      onPress={togglePause}
+    >
+      <Text>
+        Play
+      </Text>
+    </TouchableOpacity>
+  </View>
 )
 ```
 
@@ -84,9 +84,9 @@ Allows you to replace the loading screen. This component does not receive any pr
 
 ```javascript
 export default Loading = () => (
-	<View>
-		<ActivityIndicator size='large'/>
-	</View>
+  <View>
+    <ActivityIndicator size='large'/>
+  </View>
 )
 ```
 
@@ -109,28 +109,28 @@ fulscreen | bool | True: player in fullscreen / false: normal mode
 
 ```javascript
 export default ControlBar = ({
-	togglePause, 
-	toggleMute, 
-	reload, 
-	paused, 
-	muted, 
-	currentTimeFormatted
+  togglePause, 
+  toggleMute, 
+  reload, 
+  paused, 
+  muted, 
+  currentTimeFormatted
 }) => (
-	<View>
-		<TouchableOpacity
-			onPress={togglePause}
-		>
-			<Text style={styles.icon}>
-				{paused ? 'play' : 'pause'}
-			</Text>
-		</TouchableOpacity>
-		<Text>
-			{currentTimeFormatted}
-		</Text>
-		<TouchableOpacity
-			onPress={toggleFullScreen}
-		>
-				{fullscreen ? 'exit_fullscreen' : 'enter_fullscreen'}
-		</TouchableOpacity>
-	</View>
+  <View>
+    <TouchableOpacity
+      onPress={togglePause}
+    >
+      <Text style={styles.icon}>
+        {paused ? 'play' : 'pause'}
+      </Text>
+    </TouchableOpacity>
+    <Text>
+      {currentTimeFormatted}
+    </Text>
+    <TouchableOpacity
+      onPress={toggleFullScreen}
+    >
+      {fullscreen ? 'exit_fullscreen' : 'enter_fullscreen'}
+    </TouchableOpacity>
+  </View>
 )
