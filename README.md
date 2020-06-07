@@ -103,8 +103,10 @@ muted | bool | True: muted
 currentTimeFormatted | text | Time formatted in HH:mm:ss
 currentTime | float | Current media time in seconds
 duration | float | Media duration time in seconds
+setCurrentTime | function | Set media current time in seconds
 toggleFullscreen | function | Function to toggle fullscreen mode
 fulscreen | bool | True: player in fullscreen / false: normal mode
+progressBarComponent | Component React Native | Component thats render Progress Bar
 
 
 ```javascript
@@ -114,7 +116,8 @@ export default ControlBar = ({
   reload, 
   paused, 
   muted, 
-  currentTimeFormatted
+  currentTimeFormatted,
+  progressBarComponent
 }) => (
   <View>
     <TouchableOpacity
@@ -124,6 +127,7 @@ export default ControlBar = ({
         {paused ? 'play' : 'pause'}
       </Text>
     </TouchableOpacity>
+    {progressBarComponent}
     <Text>
       {currentTimeFormatted}
     </Text>
@@ -134,3 +138,53 @@ export default ControlBar = ({
     </TouchableOpacity>
   </View>
 )
+```
+
+### progressBarComponent
+Allows you to replace the progress bar of media player control bar. List of props received on component:
+
+Property | Type | Description
+--- | --- | ---
+currentTime | float | Current media time in seconds
+duration | float | Media duration time in seconds
+setCurrentTime | function | Set media current time in seconds
+
+
+```javascript
+export default ProgressBar = ({
+  currentTime,
+  duration,
+  setCurrentTime,
+}) => {
+
+  function getCurrentTimePercentage(currentTime, duration) {
+    if (currentTime > 0) {
+      return parseFloat(currentTime) / parseFloat(duration)
+    } else {
+      return 0
+    }
+  }
+
+  const flexCompleted = getCurrentTimePercentage(currentTime, duration) * 100;
+  const flexRemaining = (1 - getCurrentTimePercentage(currentTime, duration)) * 100;
+
+  return(
+    <View 
+      style={styles.progress}
+    >
+      <View
+        style={[
+          styles.innerProgressCompleted, 
+          { flex: flexCompleted }
+        ]}
+      />
+      <View 
+        style={[
+          styles.innerProgressRemaining, 
+          { flex: flexRemaining }
+        ]}
+      />
+    </View>
+  )
+}
+```
