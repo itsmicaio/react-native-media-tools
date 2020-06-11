@@ -27,7 +27,7 @@ export default class Player extends PureComponent {
 
     componentWillUnmount = () => {
         this.setState({ isMounted: false })
-        this.toggleFullScreen(this.state.currentTime)
+        this.setCurrentTime(this.state.currentTime)
     }
     
 
@@ -145,6 +145,15 @@ export default class Player extends PureComponent {
         toggleFullScreen(currentTime)
     }
 
+    setCurrentTime = (time) => {
+        this.setState({ isMounted: false })
+
+        this.refs.VIDEO_COMPONENT.seek(time)
+        this.props.setCurrentTime(time)
+
+        this.setState({ isMounted: true })
+    }
+
     hideShowControls = () => {
         if (this.props.notHideControls) return
 
@@ -186,6 +195,7 @@ export default class Player extends PureComponent {
             LoadingComponent,
             InitialPlayComponent,
             ControlBarComponent,
+            ProgressBarComponent,
             onBuffer,
             onLoad,
             onError,
@@ -232,6 +242,12 @@ export default class Player extends PureComponent {
                 togglePause={this.togglePause}
             />
 
+        const renderProgressBarComponent = <ProgressBarComponent
+            currentTime={currentTime}
+            duration={duration}
+            setCurrentTime={this.setCurrentTime}
+        />
+
         const renderControlBar = showControls &&
             <ControlBar
                 Component={ControlBarComponent}
@@ -241,10 +257,12 @@ export default class Player extends PureComponent {
                 toggleMute={() => this.setState({ muted: !muted })}
                 reload={this.reload}
                 currentTime={currentTime}
-                orientation={orientation}
                 duration={duration}
+                setCurrentTime={this.setCurrentTime}
+                orientation={orientation}
                 toggleFullScreen={this.toggleFullScreen}
                 fullscreen={fullscreen}
+                progressBarComponent={renderProgressBarComponent}
             />
 
         const renderToggleControlsFrame = !loading && !paused &&
