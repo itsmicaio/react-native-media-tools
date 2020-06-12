@@ -208,7 +208,7 @@ export default class Player extends PureComponent {
         } = this.props
 
         const size = {
-            width: width,
+            width: orientation === 'portrait' ? width : Dimensions.get('window').width,
             height: orientation === 'portrait' ? height : '96%',
         }
 
