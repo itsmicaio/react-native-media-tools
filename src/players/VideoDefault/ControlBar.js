@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     View,
     TouchableOpacity,
     Text,
     StyleSheet,
     Platform,
+    Animated
 } from 'react-native'
 
 import { colors } from '../../commons'
@@ -51,17 +52,32 @@ export default ControlBar = ({
     reload,
     orientation,
     currentTimeFormatted,
-    currentTime,
-    duration,
-    setCurrentTime,
     toggleFullScreen,
     fullscreen,
     progressBarComponent,
+    showControls
 }) => {
 
+    useEffect(() => {
+        Animated.timing(
+            fadeValue,
+            {
+                toValue: showControls ? 1 : 0,
+                duration: showControls ? 400 : 700,
+                useNativeDriver: true
+            }
+        ).start()
+    }, [showControls])
+
+    const [fadeValue, setFadeValue] = useState(new Animated.Value(1))
+
+
     return(
-        <View
-            style={[styles.bar, { paddingHorizontal: Platform.OS === "ios" && orientation === 'landscape' ? 15 : 0 }]}
+        <Animated.View
+            style={[styles.bar, { 
+                paddingHorizontal: Platform.OS === "ios" && orientation === 'landscape' ? 15 : 0,
+                opacity: fadeValue
+            }]}
         >
             <View
                 style={styles.barSides}
@@ -97,6 +113,6 @@ export default ControlBar = ({
                     {fullscreen ? <Icon name='exit_fullscreen' /> : <Icon name='enter_fullscreen' />}
                 </TouchableOpacity>
             </View>
-        </View>
+        </Animated.View>
     )
 }

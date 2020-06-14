@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import {
     View,
+    Dimensions
 } from 'react-native'
 import ControlBar from './ControlBar'
 import ButtonFrame from './ButtonFrame'
@@ -248,23 +249,6 @@ export default class Player extends PureComponent {
             setCurrentTime={this.setCurrentTime}
         />
 
-        const renderControlBar = showControls &&
-            <ControlBar
-                Component={ControlBarComponent}
-                togglePause={this.togglePause}
-                paused={paused}
-                muted={muted}
-                toggleMute={() => this.setState({ muted: !muted })}
-                reload={this.reload}
-                currentTime={currentTime}
-                duration={duration}
-                setCurrentTime={this.setCurrentTime}
-                orientation={orientation}
-                toggleFullScreen={this.toggleFullScreen}
-                fullscreen={fullscreen}
-                progressBarComponent={renderProgressBarComponent}
-            />
-
         const renderToggleControlsFrame = !loading && !paused &&
             <ButtonFrame
                 style={boxStyle}
@@ -280,7 +264,22 @@ export default class Player extends PureComponent {
                 {renderCenterPlayButton}
                 {renderToggleControlsFrame}
                 {renderLoading}
-                {renderControlBar}
+                <ControlBar
+                Component={ControlBarComponent}
+                togglePause={this.togglePause}
+                paused={paused}
+                muted={muted}
+                toggleMute={() => this.setState({ muted: !muted })}
+                reload={this.reload}
+                currentTime={currentTime}
+                duration={duration}
+                setCurrentTime={this.setCurrentTime}
+                orientation={orientation}
+                toggleFullScreen={this.toggleFullScreen}
+                fullscreen={fullscreen}
+                progressBarComponent={renderProgressBarComponent}
+                showControls={this.state.showControls}
+            />
             </>
 
         return (
