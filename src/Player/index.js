@@ -22,15 +22,16 @@ export default class Player extends PureComponent {
         duration: 0,
         paused: this.props.isPaused,
         muted: false,
-        countdown: false,
-        isMounted: true
+        isMounted: true,
+        countdown: null
     }
 
     componentWillUnmount = () => {
         this.setState({ isMounted: false })
         this.setCurrentTime(this.state.currentTime)
     }
-    
+
+    componentDidUpdate = () => this.state.paused ? clearInterval(this.state.countdown) : false
 
     onBuffer = (event) => {
         this.setState({ loading: event.isBuffering })
@@ -155,24 +156,19 @@ export default class Player extends PureComponent {
         this.setState({ isMounted: true })
     }
 
-    hideShowControls = () => {
-        if (this.props.notHideControls) return
-
-        const countdown = this.state.countdown
+    toggleShowControls = () => {
         const showControls = this.state.showControls
 
-        if (!countdown && !this.state.paused) {
+        if (!showControls) {
+            this.setState({ showControls: true })
 
-            this.setState({ countdown: true })
-
-            setTimeout(() => {
-                showControls && !this.state.paused ?
-                    this.setState({ showControls: false })
-                    :
-                    false
-
-                this.setState({ countdown: false })
+            const countdown = setTimeout(() => {
+                this.setState({ showControls: false })
             }, 3000)
+
+            this.setState({countdown})
+        } else {
+            this.setState({ showControls: false })
         }
     }
 
@@ -241,6 +237,7 @@ export default class Player extends PureComponent {
         const renderCenterPlayButton = !loading && paused &&
             <InitialPlayComponent
                 togglePause={this.togglePause}
+                toggleShowControls={this.toggleShowControls}
             />
 
         const renderProgressBarComponent = <ProgressBarComponent
@@ -252,7 +249,7 @@ export default class Player extends PureComponent {
         const renderToggleControlsFrame = !loading && !paused &&
             <ButtonFrame
                 style={boxStyle}
-                onPress={() => this.setState({ showControls: !showControls })}
+                onPress={this.toggleShowControls}
             />
 
 
@@ -265,21 +262,21 @@ export default class Player extends PureComponent {
                 {renderToggleControlsFrame}
                 {renderLoading}
                 <ControlBar
-                Component={ControlBarComponent}
-                togglePause={this.togglePause}
-                paused={paused}
-                muted={muted}
-                toggleMute={() => this.setState({ muted: !muted })}
-                reload={this.reload}
-                currentTime={currentTime}
-                duration={duration}
-                setCurrentTime={this.setCurrentTime}
-                orientation={orientation}
-                toggleFullScreen={this.toggleFullScreen}
-                fullscreen={fullscreen}
-                progressBarComponent={renderProgressBarComponent}
-                showControls={this.state.showControls}
-            />
+                    Component={ControlBarComponent}
+                    togglePause={this.togglePause}
+                    paused={paused}
+                    muted={muted}
+                    toggleMute={() => this.setState({ muted: !muted })}
+                    reload={this.reload}
+                    currentTime={currentTime}
+                    duration={duration}
+                    setCurrentTime={this.setCurrentTime}
+                    orientation={orientation}
+                    toggleFullScreen={this.toggleFullScreen}
+                    fullscreen={fullscreen}
+                    progressBarComponent={renderProgressBarComponent}
+                    showControls={this.state.showControls}
+                />
             </>
 
         return (
